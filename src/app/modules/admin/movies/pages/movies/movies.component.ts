@@ -7,7 +7,8 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 
-import {BehaviorSubject, Subject} from 'rxjs';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
+import {MovieService} from '../../service/movie.service';
 
 @Component({
     selector: 'app-movies',
@@ -24,24 +25,31 @@ export class MoviesComponent implements OnInit, OnDestroy {
     filters: {
         query$: BehaviorSubject<string>;
     } = {
-        query$        : new BehaviorSubject(''),
+        query$: new BehaviorSubject(''),
     };
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
+        private _movieService: MovieService
     ) {
     }
 
     ngOnInit(): void {
 
+        this._movieService.movies$
+            .pipe((takeUntil(this._unsubscribeAll)))
+            .subscribe((movies) => {
+                this.movies = this.filteredMovies = movies;
+                this._changeDetectorRef.markForCheck();
+            });
+
         this.filters.query$.subscribe((query) => {
 
             this.filteredMovies = this.movies;
 
-            if ( query !== '' )
-            {
+            if (query !== '') {
                 this.filteredMovies = this.filteredMovies.filter(movie => movie.title.toLowerCase().includes(query.toLowerCase())
                     || movie.description.toLowerCase().includes(query.toLowerCase())
                     || movie.category.toLowerCase().includes(query.toLowerCase()));
@@ -54,13 +62,11 @@ export class MoviesComponent implements OnInit, OnDestroy {
         this._unsubscribeAll.complete();
     }
 
-    filterByQuery(query: string): void
-    {
+    filterByQuery(query: string): void {
         this.filters.query$.next(query);
     }
 
-    trackByFn(index: number, item: any): any
-    {
+    trackByFn(index: number, item: any): any {
         return item.id || index;
     }
 }
