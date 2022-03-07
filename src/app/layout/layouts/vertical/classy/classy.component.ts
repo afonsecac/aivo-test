@@ -1,6 +1,9 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { Subject, takeUntil } from 'rxjs';
+import { AuthService } from '@auth0/auth0-angular';
+
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { Navigation } from 'app/core/navigation/navigation.types';
@@ -17,7 +20,7 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
 {
     isScreenSmall: boolean;
     navigation: Navigation;
-    user: User;
+    user: any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -29,7 +32,8 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
         private _navigationService: NavigationService,
         private _userService: UserService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
-        private _fuseNavigationService: FuseNavigationService
+        private _fuseNavigationService: FuseNavigationService,
+        private _auth0Service: AuthService
     )
     {
     }
@@ -62,12 +66,9 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
                 this.navigation = navigation;
             });
 
-        // Subscribe to the user service
-        this._userService.user$
+        this._auth0Service.user$
             .pipe((takeUntil(this._unsubscribeAll)))
-            .subscribe((user: User) => {
-                this.user = user;
-            });
+            .subscribe((user: any) => this.user = user);
 
         // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$

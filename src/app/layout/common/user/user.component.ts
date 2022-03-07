@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { BooleanInput } from '@angular/cdk/coercion';
+
 import { Subject, takeUntil } from 'rxjs';
+import {AuthService} from '@auth0/auth0-angular';
+
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 
@@ -19,7 +22,7 @@ export class UserComponent implements OnInit, OnDestroy
     /* eslint-enable @typescript-eslint/naming-convention */
 
     @Input() showAvatar: boolean = true;
-    user: User;
+    user: any;
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -29,7 +32,8 @@ export class UserComponent implements OnInit, OnDestroy
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
-        private _userService: UserService
+        private _userService: UserService,
+        public _auth0: AuthService
     )
     {
     }
@@ -44,7 +48,7 @@ export class UserComponent implements OnInit, OnDestroy
     ngOnInit(): void
     {
         // Subscribe to user changes
-        this._userService.user$
+        this._auth0.user$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((user: User) => {
                 this.user = user;
@@ -93,6 +97,6 @@ export class UserComponent implements OnInit, OnDestroy
      */
     signOut(): void
     {
-        this._router.navigate(['/sign-out']);
+        this._auth0.logout({ returnTo: 'http://localhost:4200' });
     }
 }
