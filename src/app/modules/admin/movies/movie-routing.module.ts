@@ -1,7 +1,9 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+
 import {MovieComponent} from './component';
 import {MoviesComponent} from './pages';
+import {MoviesResolver} from './service/movies.resolver';
 
 const routes: Routes = [
     {
@@ -11,7 +13,10 @@ const routes: Routes = [
             {
                 path: '',
                 pathMatch: 'full',
-                component: MoviesComponent
+                component: MoviesComponent,
+                resolve: {
+                    movies: MoviesResolver
+                }
             }
         ]
     }
