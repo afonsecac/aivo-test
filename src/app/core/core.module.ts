@@ -1,13 +1,23 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
+
+import { AuthModule as Auth0Module } from '@auth0/auth0-angular';
+
 import { AuthModule } from 'app/core/auth/auth.module';
 import { IconsModule } from 'app/core/icons/icons.module';
 import { TranslocoCoreModule } from 'app/core/transloco/transloco.module';
+import { environment } from '../../environments/environment';
 
 @NgModule({
     imports: [
         AuthModule,
         IconsModule,
-        TranslocoCoreModule
+        TranslocoCoreModule,
+        Auth0Module.forRoot({
+            ...environment.auth,
+            httpInterceptor: {
+                ...environment.httpInterceptor
+            }
+        })
     ]
 })
 export class CoreModule
