@@ -3,6 +3,13 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 
 export const defaultNavigation: FuseNavigationItem[] = [
     {
+        id   : 'movies',
+        title: 'Movies',
+        type : 'basic',
+        icon : 'heroicons_outline:film',
+        link : '/movies'
+    },
+    {
         id   : 'example',
         title: 'Example',
         type : 'basic',
@@ -11,6 +18,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
     }
 ];
 export const compactNavigation: FuseNavigationItem[] = [
+    {
+        id   : 'movies',
+        title: 'Movies',
+        type : 'basic',
+        icon : 'heroicons_outline:film',
+        link : '/movies'
+    },
     {
         id   : 'example',
         title: 'Example',
@@ -21,6 +35,13 @@ export const compactNavigation: FuseNavigationItem[] = [
 ];
 export const futuristicNavigation: FuseNavigationItem[] = [
     {
+        id   : 'movies',
+        title: 'Movies',
+        type : 'basic',
+        icon : 'heroicons_outline:film',
+        link : '/movies'
+    },
+    {
         id   : 'example',
         title: 'Example',
         type : 'basic',
@@ -29,6 +50,13 @@ export const futuristicNavigation: FuseNavigationItem[] = [
     }
 ];
 export const horizontalNavigation: FuseNavigationItem[] = [
+    {
+        id   : 'movies',
+        title: 'Movies',
+        type : 'basic',
+        icon : 'heroicons_outline:film',
+        link : '/movies'
+    },
     {
         id   : 'example',
         title: 'Example',
