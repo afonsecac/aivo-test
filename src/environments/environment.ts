@@ -2,8 +2,19 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import {apiUri} from '../../apiUri';
+
 export const environment = {
-    production: false
+    production: false,
+    auth: {
+        domain: 'dev-sxtr6zi3.us.auth0.com',
+        clientId: 'S1mR9nnMwSO3YZSPaxIzM76fezprbKaX',
+        redirectUri: window.location.origin,
+        errorPath: '/error'
+    },
+    httpInterceptor: {
+        allowedList: [`${apiUri}/*`],
+    },
 };
 
 /*
