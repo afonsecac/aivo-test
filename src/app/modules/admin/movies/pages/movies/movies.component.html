@@ -25,12 +25,61 @@
     <div class="flex flex-auto p-6 sm:p-10">
         <div class="flex flex-col flex-auto w-full max-w-xs sm:max-w-5xl mx-auto">
             <div class="flex flex-col sm:flex-row items-center justify-between w-full max-w-xs sm:max-w-none">
+                <mat-form-field class="fuse-mat-no-subscript w-full sm:w-36">
+                    <mat-select
+                        [value]="'all'"
+                        (selectionChange)="filterByCategory($event)">
+                        <mat-option [value]="'all'">All</mat-option>
+                        <ng-container *ngFor="let category of categories; trackBy: trackByFn">
+                            <mat-option [value]="category">{{category | uppercase}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field
+                    class="fuse-mat-no-subscript w-full sm:w-72 mt-4 sm:mt-0 sm:ml-4"
+                    [floatLabel]="'always'">
+                    <mat-icon
+                        matPrefix
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                    <input
+                        (input)="filterByQuery(query.value)"
+                        placeholder="Search by title, year or description"
+                        matInput
+                        #query>
+                </mat-form-field>
+
+            </div>
+            <div class="flex flex-col mt-5 sm:flex-row items-center justify-end w-full max-w-xs sm:max-w-none">
+                <span class="mr-5">Order By</span>
+                <mat-form-field class="fuse-mat-no-subscript w-full sm:w-36">
+                    <mat-select
+                        [(ngModel)]="sortKey"
+                        (selectionChange)="changeOrderBy($event)">
+                        <mat-option [value]="'title'">Title</mat-option>
+                        <mat-option [value]="'releaseYear'">Year</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <button mat-icon-button
+                        (click)="ascOrDesc = !ascOrDesc; sortBy()"
+                        *ngIf="ascOrDesc">
+                    <mat-icon>vertical_align_top</mat-icon>
+                </button>
+                <button mat-icon-button
+                        (click)="ascOrDesc = !ascOrDesc; sortBy()"
+                        *ngIf="!ascOrDesc">
+                    <mat-icon>vertical_align_bottom</mat-icon>
+                </button>
+                <button mat-icon-button
+                        (click)="ascOrDesc = !ascOrDesc; sortBy()">
+                    <mat-icon svgIcon="sort"></mat-icon>
+                </button>
             </div>
 
             <ng-container *ngIf="this.filteredMovies?.length; else noMovies">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 sm:mt-10">
                     <ng-container *ngFor="let movie of filteredMovies; trackBy: trackByFn">
-                        <div class="flex flex-col h-96 shadow rounded-2xl overflow-hidden bg-card">
+                        <div class="flex flex-col h-108 shadow rounded-2xl overflow-hidden bg-card">
                             <div class="flex flex-col p-6">
                                 <div class="flex items-center justify-between">
                                     <div
@@ -39,7 +88,13 @@
                                     </div>
                                 </div>
                                 <div class="mt-4 text-lg font-medium">{{movie.title}}</div>
-                                <img [src]="movie?.images['Poster Art'].url" class="p-5 w-48 h-48">
+                                <img [src]="movie?.images['Poster Art'].url" class="p-5 mh-auto h-48">
+                                <div class="flex items-center mt-2 leading-5 text-md text-secondary">
+                                    <mat-icon
+                                        class="icon-size-5 text-hint"
+                                        [svgIcon]="'heroicons_solid:academic-cap'"></mat-icon>
+                                    <div class="ml-1.5">{{ movie?.releaseYear }}</div>
+                                </div>
                             </div>
                             <div class="flex flex-col w-full mt-auto">
                                 <div class="px-6 py-4 text-right bg-gray-50 dark:bg-transparent">
