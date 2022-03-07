@@ -22,8 +22,7 @@ export class MovieService {
         return this._http.get('/assets/movies.json')
             .pipe(
                 tap((response: any) => {
-                    console.log(response);
-                    // this._movies.next(response?.entries);
+                    this._movies.next(response?.entries);
                 })
             );
     }
